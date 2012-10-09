@@ -10,11 +10,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class Converter {
+public class MapFeaturesConverter {
     public static final void main(String[] args) {
 
-        File inputFile = new File("map_features.xml");
-        File outputFile = new File("output.xml");
+        File inputFile = new File("data/map_features.xml");
+        File outputFile = new File("data/output.xml");
         try {
             CustomizedXMLFilter filter = new CustomizedXMLFilter(XMLReaderFactory.createXMLReader());
             TransformerFactory factory = TransformerFactory.newInstance();

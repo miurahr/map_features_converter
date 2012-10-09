@@ -11,11 +11,13 @@ import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.XMLReader;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
 
 public final class CustomizedXMLFilter extends XMLFilterImpl {    
 
-    Stack elements;
+    Stack <String>elements;
     String propid;
+    String elemName;
 
     /**
      * Constructor
@@ -28,7 +30,9 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
 
     public void startDocument()
     {
-        elements = new Stack();
+        elements = new Stack<String>();
+        propid = null;
+        elemName = null;
     }
 
    public void endDocument() throws SAXException
@@ -44,54 +48,58 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
      * @throws SAXException
      */
     public final void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-        super.startElement(uri, localName, qName, atts);
+
 
         elements.push(qName);
         for (int i=0;i<atts.getLength();i++) {
             String aname = atts.getQName(i);
             if (aname.equals("propid")) {
                 propid = atts.getValue(i);
+                elemName = qName;
             }
-	}
+	    }
+        AttributesImpl newatts = new AttributesImpl(atts);
+        if ((propid != null) && propid.equals("category.roads")) {
+            newatts.setValue(newatts.getIndex("name"), "道路");
+        }
+        super.startElement(uri, localName, qName, newatts);
     }
     
     /**
-     * 文字列があったことをイベントとして受取るメソッド(SAXイベントハンドラ)のオーバーライド
-     * @param ch 文字の配列
-     * @param start 配列の中の開始位置を表すインデックス
-     * @param length 配列の中での長さを表す
+     * @param ch
+     * @param start
+     * @param length
      * @throws SAXException
      */
     public final void characters(char[] ch, int start, int length) throws SAXException {
         StringBuffer buf = new StringBuffer();
-        for (int i=0; i<length; i++) {
+        String currentElem = elements.peek();
+          for (int i=0; i<length; i++) {
             char c = ch[start + i];
-            if (! Character.isWhitespace(c)) {
-                buf.append(c);
-            }
-        }
+            buf.append(c);
+          }
+        // pass to output
         int size = buf.length();
         if (size > 0) {
             char modified[] = new char[size];
             buf.getChars(0, size, modified, 0);
             super.characters(modified, 0, size);
-            // 加工したものを通す
-        }
-        else {
-            // super.characters(ch, start, length) を呼び出さないと、文字列をスルーしない
         }
     }
 
     /**
-     * 要素が終了したことをイベントとして受取るメソッド(SAXイベントハンドラ)のオーバーライド
-     * 指定した要素が終わった所で、文字列を分割した後出力
-     * @param uri 要素のnamespace name
-     * @param localName 要素のローカル名
-     * @param qName 要素の修飾名
+     * @param uri
+     * @param localName
+     * @param qName
      * @throws SAXException
      */
     public final void endElement(String uri, String localName, String qName) throws SAXException {
-        elements.pop();
+        String popedElem = elements.pop();
+        if (elemName != null) {
+            if (elemName.equals(popedElem)) {
+                propid = null;
+            }
+        }
         super.endElement(uri, localName, qName);
     }
 }
