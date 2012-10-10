@@ -15,17 +15,20 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public final class CustomizedXMLFilter extends XMLFilterImpl {    
 
-    Stack <String>elements;
-    String propid;
-    String elemName;
+    private Properties configuration;
+
+    private Stack <String>elements;
+    private String propid;
+    private String elemName;
 
     /**
      * Constructor
      * @param parent base XMLReader
      * @throws SAXException
      */
-    public CustomizedXMLFilter(XMLReader parent) throws SAXException {
+    public CustomizedXMLFilter(XMLReader parent, Properties configuration) throws SAXException {
         super(parent);
+        this.configuration = configuration;
     }
 
     public void startDocument()
@@ -49,7 +52,6 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
      */
     public final void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 
-
         elements.push(qName);
         for (int i=0;i<atts.getLength();i++) {
             String aname = atts.getQName(i);
@@ -60,7 +62,8 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
 	    }
         AttributesImpl newatts = new AttributesImpl(atts);
         if ((propid != null) && propid.equals("category.roads")) {
-            newatts.setValue(newatts.getIndex("name"), "道路");
+            String localizedName = configuration.getProperty("category.roads.name");
+            newatts.setValue(newatts.getIndex("name"), localizedName);
         }
         super.startElement(uri, localName, qName, newatts);
     }
