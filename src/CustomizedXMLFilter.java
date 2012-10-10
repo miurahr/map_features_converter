@@ -15,11 +15,13 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public final class CustomizedXMLFilter extends XMLFilterImpl {    
 
-    private Properties configuration;
+    public enum featureCategory {NONE, CATEGORY, INPUTSET, FEATURE};
 
+    private Properties configuration;
     private Stack <String>elements;
-    private String propid;
+    private String featureKey;
     private String elemName;
+    private featureCategory featureCat;
 
     /**
      * Constructor
@@ -31,16 +33,27 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
         this.configuration = configuration;
     }
 
-    public void startDocument()
+    public void startDocument() throws SAXException
     {
         elements = new Stack<String>();
-        propid = null;
+        featureKey = null;
         elemName = null;
+        featureCat = featureCategory.NONE;
+        super.startDocument();
     }
 
-   public void endDocument() throws SAXException
-   {
-   }
+    public void endDocument() throws SAXException
+    {
+        super.endDocument();
+    }
+
+    private AttributesImpl replaceAtts(AttributesImpl newatts, String featureKey, String tag) {
+        String localizedName = configuration.getProperty(featureKey + "." + tag);
+        if (localizedName != null) {
+            newatts.setValue(newatts.getIndex(tag), localizedName);
+        }
+        return newatts;
+    }
 
     /**
      * startElement handler
@@ -53,17 +66,37 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
     public final void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 
         elements.push(qName);
+
         for (int i=0;i<atts.getLength();i++) {
             String aname = atts.getQName(i);
-            if (aname.equals("propid")) {
-                propid = atts.getValue(i);
-                elemName = qName;
+            if (aname.equals("id")) {
+                if (qName.equals("category")) {
+                    featureCat = featureCategory.CATEGORY;
+                    featureKey = "category." + atts.getValue(i);
+                    elemName = qName;
+                } else if (qName.equals("input")) {
+                    featureCat = featureCategory.INPUTSET;
+                    featureKey = "input." + atts.getValue(i);
+                    elemName = qName;
+                } else if (qName.equals("feature")) {
+                    featureCat = featureCategory.FEATURE;
+                    featureKey = "feature." + atts.getValue(i);
+                    elemName = qName;
+                } else {
+                    featureCat = featureCategory.NONE;
+                }
             }
 	    }
+
         AttributesImpl newatts = new AttributesImpl(atts);
-        if ((propid != null) && propid.equals("category.roads")) {
-            String localizedName = configuration.getProperty("category.roads.name");
-            newatts.setValue(newatts.getIndex("name"), localizedName);
+        if (featureKey != null && elemName == qName) {
+            if (featureCat == featureCategory.CATEGORY) {
+                newatts = replaceAtts(newatts, featureKey, "name");
+            } else if (featureCat == featureCategory.INPUTSET) {
+                newatts = replaceAtts(newatts, featureKey, "name");
+            } else if (featureCat == featureCategory.FEATURE) {
+                newatts = replaceAtts(newatts, featureKey, "name");
+            }
         }
         super.startElement(uri, localName, qName, newatts);
     }
@@ -100,7 +133,8 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
         String popedElem = elements.pop();
         if (elemName != null) {
             if (elemName.equals(popedElem)) {
-                propid = null;
+                featureKey = null;
+                featureCat = featureCategory.NONE;
             }
         }
         super.endElement(uri, localName, qName);

@@ -7,7 +7,7 @@
 <mapFeatures>
 
   <!-- Categories -->
-  <category name="Roads" id="roads" propid="category.roads"/>
+  <category name="Roads" id="roads"/>
   <category name="Paths" id="paths"/>
   <category name="Shopping" id="shopping"/>
   <category name="Food and Drink" id="foodanddrink"/>
@@ -31,16 +31,16 @@
   <!-- Common input sets -->
 
   <inputSet id="simpleName">
-    <input type="freetext" presence="always" name="Name" key="name" description="The name" priority="highest" propid="input.simpleName.name"/>
+    <input type="freetext" presence="always" name="Name" key="name" description="The name" priority="highest" id="simpleName.name"/>
   </inputSet>
 
   <inputSet id="nameAndRef">
     <inputSet ref="simpleName" />
-    <input type="freetext" presence="always" name="Reference number" key="ref" description="A reference number or code used to identify this thing." propid="input.nameAndRef.ref"/>
+    <input type="freetext" presence="always" name="Reference number" key="ref" description="A reference number or code used to identify this thing." id="nameAndRef.ref"/>
   </inputSet>
 
    <inputSet id="simpleBrand"> 
-     <input type="freetext" category="Naming" presence="always" name="Brand" key="brand" description="Brand, i.e. Acme" propid="input.simpleBrand.brand"/> 
+     <input type="freetext" category="Naming" presence="always" name="Brand" key="brand" description="Brand, i.e. Acme" id="simpleBrand.brand"/> 
    </inputSet> 
   
    <inputSet id="simpleOperator"> 
