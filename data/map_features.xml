@@ -48,11 +48,11 @@
    </inputSet> 
 
   <inputSet id="source">
-    <input type="freetext" category="Details" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Bing, ...)" priority="lowest" propid="input.source"/>
+    <input type="freetext" category="Details" presence="onTagMatch" name="Source" key="source" description="The primary source of information for this object (GPS, survey, Bing, ...)" priority="lowest" id="source.source"/>
   </inputSet>
 
   <inputSet id="designation">
-    <input type="freetext" category="Details" presence="onTagMatch" description="The official designation or classification (if any). Only use this if the organisation that runs it has its own classification system." name="Official classification" key="designation" priority="lowest" propid="input.designation"/>
+    <input type="freetext" category="Details" presence="onTagMatch" description="The official designation or classification (if any). Only use this if the organisation that runs it has its own classification system." name="Official classification" key="designation" priority="lowest" id="designation.designation"/>
   </inputSet>
 
   <inputSet id="common">
@@ -63,10 +63,10 @@
   <inputSet id="names">
     <input type="freetext" presence="always"
         name="Name" category="Details" priority="highest"
-        key="name" description="The most common name" propid="input.names.name"/>
+        key="name" description="The most common name" id="names.name"/>
     <input type="freetext" presence="onTagMatch"
         name="International Name" category="Details" subcategory="Additional names"
-        key="int_name" description="The internationally recognised name" propid="input.names.int_name"/>
+        key="int_name" description="The internationally recognised name" id="names.int_name"/>
     <input type="freetext" presence="onTagMatch"
         name="Historical Name" category="Details" subcategory="Additional names" priority="low"
         key="old_name" description="The historic or previous name"/>
