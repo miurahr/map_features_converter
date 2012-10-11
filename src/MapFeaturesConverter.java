@@ -20,19 +20,38 @@ public class MapFeaturesConverter {
 
     public static final void main(String[] args) {
 
-        File inputFile = new File("data/map_features.xml");
-        File outputFile = new File("data/output.xml");
+        String filename;
+        String locale;
+        File inputFile;
+        File outputFile;
+
+        if (args.length > 1) {
+            filename = args[0];
+            locale = args[1];
+        } else if (args.length > 0) {
+            filename = args[0];
+            locale = "en_US";
+        } else {
+            filename = "map_features.xml";
+            locale = "en_US";
+        }
 
         try {
-            InputStream inputStream = new FileInputStream(new File("data/map_features.properties"));
+            inputFile = new File("data/" + filename);
+            new File("out/" + locale).mkdir();
+            outputFile = new File("out/" + locale + "/" +filename);
+
+            InputStream propInputStream = new FileInputStream(new File("data/" + locale + "/map_features.properties"));
             Properties configuration = new Properties();
-            configuration.load(new InputStreamReader(inputStream, "UTF-8"));
+            configuration.load(new InputStreamReader(propInputStream, "UTF-8"));
+
             CustomizedXMLFilter filter = new CustomizedXMLFilter(XMLReaderFactory.createXMLReader(), configuration);
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer();
 
             Source source = new SAXSource(filter, new InputSource(new FileInputStream(inputFile)));
             Result result = new StreamResult(outputFile);
+
             transformer.transform(source, result);
         }
         catch (javax.xml.transform.TransformerFactoryConfigurationError e) {
