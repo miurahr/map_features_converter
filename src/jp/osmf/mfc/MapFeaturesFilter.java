@@ -1,4 +1,5 @@
-//package jp.osmf.potlatch2;
+package jp.osmf.mfc;
+
 //
 // Utility to generate localized map_features.xml and map_features/feature.xml
 //
@@ -13,7 +14,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-public final class CustomizedXMLFilter extends XMLFilterImpl {    
+public final class MapFeaturesFilter extends XMLFilterImpl {    
 
     public enum featureCategory {NONE, CATEGORY, INPUTSET, FEATURE};
 
@@ -28,7 +29,7 @@ public final class CustomizedXMLFilter extends XMLFilterImpl {
      * @param parent base XMLReader
      * @throws SAXException
      */
-    public CustomizedXMLFilter(XMLReader parent, Properties configuration) throws SAXException {
+    public MapFeaturesFilter(XMLReader parent, Properties configuration) throws SAXException {
         super(parent);
         this.configuration = configuration;
     }

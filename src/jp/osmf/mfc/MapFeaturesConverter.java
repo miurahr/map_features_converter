@@ -1,3 +1,12 @@
+package jp.osmf.mfc;
+
+//
+// Utility to generate localized map_features.xml and map_features/feature.xml
+//
+// Copyright 2012 Hiroshi Miura <miurahr@osmf.jp>
+// Copyright 2012 OpenStreetMap Foundation Japan
+//
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,32 +29,30 @@ public class MapFeaturesConverter {
 
     public static final void main(String[] args) {
 
-        String filename;
-        String locale;
+        String sourceFile = "";
+        String destFile = "";
+        String propertiesFile = "";
         File inputFile;
         File outputFile;
 
-        if (args.length > 1) {
-            filename = args[0];
-            locale = args[1];
-        } else if (args.length > 0) {
-            filename = args[0];
-            locale = "en_US";
+        if (args.length > 2) {
+            sourceFile = args[0];
+            destFile = args[1];
+            propertiesFile = args[2];
         } else {
-            filename = "map_features.xml";
-            locale = "en_US";
+            System.err.println("java -jar MapFeaturesConverter.jar <source> <dest> <properties>");
+            System.exit(1);
         }
 
         try {
-            inputFile = new File("data/" + filename);
-            new File("out/" + locale).mkdir();
-            outputFile = new File("out/" + locale + "/" +filename);
+            inputFile = new File(sourceFile);
+            outputFile = new File(destFile);
 
-            InputStream propInputStream = new FileInputStream(new File("data/" + locale + "/map_features.properties"));
+            InputStream propInputStream = new FileInputStream(new File(propertiesFile));
             Properties configuration = new Properties();
             configuration.load(new InputStreamReader(propInputStream, "UTF-8"));
 
-            CustomizedXMLFilter filter = new CustomizedXMLFilter(XMLReaderFactory.createXMLReader(), configuration);
+            MapFeaturesFilter filter = new MapFeaturesFilter(XMLReaderFactory.createXMLReader(), configuration);
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer();
 
