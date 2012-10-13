@@ -1,4 +1,4 @@
-<project name="MapFeaturesConverter" default="dist" basedir=".">
+<project name="MapFeaturesConverter" default="dist" basedir="." xmlns:ac="antlib:net.sf.antcontrib">
     <description>
         map_features converter for l10n
     </description>
@@ -8,6 +8,9 @@
 
   <!-- load previously defined configuration properties file -->
   <property file="build.properties" />
+
+  <!-- ant-contrib to build multiple locales -->
+  <taskdef uri="antlib:net.sf.antcontrib" resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/lib/ant-contrib-1.0b3.jar"/>
 
   <target name="init">
     <tstamp/>
@@ -20,10 +23,8 @@
 
   <target name="dist" depends="compile" >
     <mkdir dir="${dist.dir}/lib"/>
-
-    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist.dir}/lib/MapFeaturesConverter-${DSTAMP}.jar" basedir="${build.dir}">
-    <manifest>
+    <jar jarfile="${dist.dir}/lib/MapFeaturesConverter.jar" basedir="${build.dir}">
+     <manifest>
       <attribute name="Main-Class" value="${main.class}"/>
       <attribute name="Class-Path" value="${runtime.classpath}"/>
       <attribute name="Implementation-Title"   value="${Name}"/>
@@ -31,12 +32,80 @@
       <attribute name="Implementation-Vendor"  value="${vendor}"/>
       <attribute name="Build-Id"
                 value="${ts} (${user.name} [${os.name} ${os.version} ${os.arch}])"/>
-  </manifest>
-  </jar>
+     </manifest>
+    </jar>
   </target>
+
+<!-- =====================
+         Test macros
+     ===================== -->
+  <macrodef name="localizeFeatures">
+    <attribute name="source"/>
+    <attribute name="dest"/>
+    <attribute name="properties"/>
+    <sequential>
+      <java classname="${main.class}" dir="${basedir}"
+          fork="yes" classpath="${dist.dir}/lib/MapFeaturesConverter.jar">
+        <arg value="@{source}"/>
+        <arg value="@{dest}"/>
+        <arg value="@{properties}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="buildL10NFeatures" description="make gen/(lang)/map_features/(feature).xml">
+    <attribute name="locale" default="en_GB"/>
+    <sequential>
+      <ac:var name="present" unset="true"/>
+      <available file="${basedir}/data/@{locale}/map_features.properties" property="present"/>
+      <fail unless="present" message="There is not a map_features.properties for @{locale}"/>
+
+      <mkdir dir="${basedir}/out/@{locale}"/>
+      <localizeFeatures source="${basedir}/data/map_features.xml"
+                dest="${basedir}/out/@{locale}/map_features.xml"
+                properties="${basedir}/data/@{locale}/map_features.properties"/>
+
+      <ac:for list="${featureGroups.list}" keepgoing="true" param="featuregroupname">
+        <sequential>
+          <localizeFeatures source="${basedir}/data/@{featuregroupname}.xml"
+                dest="${basedir}/out/@{locale}/@{featuregroupname}.xml"
+                properties="${basedir}/data/@{locale}/map_features.properties"/>
+          </sequential>
+      </ac:for>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="deployLocale" description="Deploying the compiled zip file">
+    <attribute name="locale" default="en_GB"/>
+    <sequential>
+      <echo>Copying @{locale}.zip to deploy directory...</echo>
+
+      <mkdir dir="${basedir}/out"/>
+      <zip destfile="${basedir}/out/@{locale}.zip" basedir="${basedir}/out/@{locale}" />
+    </sequential>
+  </macrodef>
+
+<!-- =====================
+         Test section
+     ===================== -->
+
+  <property name="locales.list" value="en_US,ja_JP"/>
+
+  <target name="test" depends="dist">
+    <ac:for list="${locales.list}" keepgoing="true" param="localename">
+      <sequential>
+        <buildL10NFeatures locale="@{localename}" />
+      </sequential>
+    </ac:for>
+  </target>
+
+<!-- =====================
+         Clean up
+     ===================== -->
 
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete dir="${dist.dir}"/>
+    <delete dir="${basedir}/out"/>
   </target>
 </project>
