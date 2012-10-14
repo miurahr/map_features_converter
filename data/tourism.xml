@@ -1,0 +1,271 @@
+<featureGroup>
+<!-- ========= Accommodation ========= -->
+  <feature name="Hotel" id="tourism.hotel">
+    <category>accommodation</category>
+    <icon image="features/pois/accommodation_hotel.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dhotel</help>
+    <point/>
+    <area/>
+    <tag k="tourism" v="hotel"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Motel" id="tourism.motel">
+    <category>accommodation</category>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmotel</help>
+    <point/>
+    <area/>
+    <icon image="features/pois/accommodation_motel.n.24.png"/>
+    <tag k="tourism" v="motel"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+
+  <feature name="Hostel" id="tourism.hostel">
+    <category>accommodation</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/accommodation_youth_hostel.n.24.png"/>
+    <tag k="tourism" v="hostel"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <!-- Note that tourism=bed_and_breakfast also gets some use. -->
+  <feature name="Guesthouse (B&amp;B)" id="tourism.guest_house">
+    <category>accommodation</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/accommodation_bed_and_breakfast.n.24.png"/>
+    <tag k="tourism" v="guest_house"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Campsite" id="tourism.camp_site">
+    <category>accommodation</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/accommodation_camping.n.24.png"/>
+    <tag k="tourism" v="camp_site"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Caravan park" id="tourism.caravan_site">
+    <category>accommodation</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/accommodation_caravan_park.n.24.png"/>
+    <tag k="tourism" v="caravan_site"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Alpine hut" id="tourism.alpine_hut">
+    <category>accommodation</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/accommodation_alpinehut.n.24.png"/>
+    <tag k="tourism" v="alpine_hut"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Chalet" id="tourism.chalet">
+    <category>accommodation</category>
+    <icon image="features/pois/accommodation_chalet.n.24.png"/>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <tag k="tourism" v="chalet"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+
+  <!-- ========= Tourism ========= -->
+  <feature name="Attraction" id="tourism.attraction">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_attraction.n.24.png">
+      <b>${name} ${addr:housename}</b><br/>
+      ${addr:housenumber} ${addr:street} ${addr:postcode}
+    </icon>
+
+    <area/>
+    <tag k="tourism" v="attraction"/>
+    <inputSet ref="names"/>
+    <inputSet ref="buildingAddress"/>
+    <inputSet ref="common"/>
+  </feature>
+
+  <feature name="Museum" id="tourism.museum">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_museum.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:tourism%3Dmuseum</help>
+    <point/>
+    <area/>
+    <tag k="tourism" v="museum"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Archaeological" id="historic.archaeological_site">
+    <category>tourism</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_archaeological.n.24.png"/>
+    <tag k="historic" v="archaeological_site"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Battlefield" id="historic.battlefield">
+    <category>tourism</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_battlefield.n.24.png"/>
+    <tag k="historic" v="battlefield"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Castle" id="historic.castle">
+    <category>tourism</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_castle.n.24.png"/>
+    <tag k="historic" v="castle"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Memorial" id="historic.memorial">
+    <category>tourism</category>
+    <point/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_memorial.n.24.png"/>
+    <tag k="historic" v="memorial"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Monument" id="historic.monument">
+    <category>tourism</category>
+    <point/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_monument.n.24.png"/>
+    <tag k="historic" v="monument"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Picnic site" id="tourism.picnic_site">
+    <category>tourism</category>
+    <point/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_picnic.n.24.png"/>
+    <tag k="tourism" v="picnic_site"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Ruins" id="historic.ruins">
+    <category>tourism</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_ruin.n.24.png"/>
+    <tag k="historic" v="ruins"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Cinema" id="amenity.cinema">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_cinema.n.24.png"/>
+    <help>http://wiki.openstreetmap.org/wiki/Tag:amenity%3Dcinema</help>
+    <point/>
+    <area/>
+    <tag k="amenity" v="cinema"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Theatre" id="amenity.theatre">
+    <category>tourism</category>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_theatre.n.24.png"/>
+    <tag k="amenity" v="theatre"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Viewpoint" id="tourism.viewpoint">
+    <category>tourism</category>
+    <point/>
+    <inputSet ref="simpleName"/>
+    <icon image="features/pois/tourist_view_point.n.24.png"/>
+    <tag k="tourism" v="viewpoint"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Zoo" id="tourism.zoo">
+    <category>tourism</category>
+    <point/>
+    <area/>
+    <icon image="features/pois/tourist_zoo.n.24.png"/>
+    <tag k="tourism" v="zoo"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Information" id="tourism.information">
+    <category>tourism</category>
+    <icon image="features/pois/amenity_information.n.24.png"/>
+    <point/>
+    <tag k="tourism" v="information"/>
+    <inputSet ref="simpleName"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+  <feature name="Artwork" id="tourism.artwork">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_art_gallery2.n.24.png"/>
+    <point/>
+    <inputSet ref="simpleName"/>
+    <tag k="tourism" v="artwork"/>
+    <inputSet ref="common"/>
+  </feature>
+
+
+
+  <feature name="Theme park" id="tourism.theme_park">
+    <category>tourism</category>
+    <icon image="features/pois/tourist_theme_park.n.24.png"/>
+    <point/>
+    <area/>
+    <inputSet ref="simpleName"/>
+    <tag k="tourism" v="theme_park"/>
+    <inputSet ref="common"/>
+  </feature>
+</featureGroup>
