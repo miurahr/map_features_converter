@@ -50,7 +50,6 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
 
     private AttributesImpl replaceAtts(AttributesImpl newatts, String featureKey, String tag) {
         String localizedName = configuration.getProperty(featureKey + "." + tag);
-        System.out.println(featureKey+"."+tag+":"+newatts.getValue(newatts.getIndex(tag)); // debug
         if (localizedName != null) {
             newatts.setValue(newatts.getIndex(tag), localizedName);
         }
