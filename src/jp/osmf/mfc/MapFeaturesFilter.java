@@ -63,7 +63,7 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
 
         for (int i=0;i<atts.getLength();i++) {
             String aname = atts.getQName(i);
-            if (aname.equals("key")) {
+            if (aname.equals(name)) {
                 result = atts.getValue(i);
             }
         }
