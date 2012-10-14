@@ -1,8 +1,7 @@
 <featureGroup>
   <feature name="Wall" id="barrier.wall">
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-    <icon>
+    <icon image="features/barrier_generic.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dwall</help>
 
@@ -13,8 +12,7 @@
 
   <feature name="Ditch" id="barrier.ditch">
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-    <icon>
+    <icon image="features/barrier_generic.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dditch</help>
 
@@ -25,8 +23,7 @@
 
   <feature name="Retaining wall" id="barrier.retaining_wall">
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-    <icon>
+    <icon image="features/barrier_generic.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dretaining_wall</help>
 
@@ -37,8 +34,7 @@
 
   <feature name="City wall" id="barrier.city_wall">
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-    <icon>
+    <icon image="features/barrier_generic.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dcity_wall</help>
 
@@ -50,8 +46,7 @@
 
   <feature name="Fence" id="barrier.fence">
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-    <icon>
+    <icon image="features/barrier_generic.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dfence</help>
 
@@ -63,8 +58,7 @@
 
   <feature name="Hedge" id="barrier.hedge">
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-    <icon>
+    <icon image="features/barrier_generic.png">
     </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dhedge</help>
 
@@ -99,7 +93,8 @@
 
   <feature name="Lift Gate" id="barrier.lift_gate">
     <category>barrier</category>
-    <icon image="features/pois/barrier_lift_gate.n.24.png"/>
+    <icon image="features/pois/barrier_lift_gate.n.24.png">
+    </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dlift_gate</help>
     <point/>
     <tag k="barrier" v="lift_gate"/>
@@ -109,7 +104,8 @@
 
   <feature name="Kissing Gate" id="barrier.kissing_gate">
     <category>barrier</category>
-    <icon image="features/pois/barrier_kissing_gate.24.png"/>
+    <icon image="features/pois/barrier_kissing_gate.24.png">
+    </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dkissing_gate</help>
     <point/>
     <tag k="barrier" v="kissing_gate"/>
@@ -170,7 +166,8 @@
 
   <feature name="Stile" id="barrier.stile">
     <category>barrier</category>
-    <icon image="features/pois/barrier_stile.n.24.png"/>
+    <icon image="features/pois/barrier_stile.n.24.png">
+    </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dstile</help>
     <point/>
     <tag k="barrier" v="stile"/>
@@ -180,8 +177,8 @@
   <feature name="Wire fence" id="barrier.wire_fence">
     <!-- no idea, but taginfo says 2700 uses -->
     <category>barrier</category>
-    <icon image="features/barrier_generic.png"/>
-   
+    <icon image="features/barrier_generic.png">
+    </icon>
     <help>http://wiki.openstreetmap.org/wiki/Tag:barrier%3Dwire_fence</help>
 
     <line/>
