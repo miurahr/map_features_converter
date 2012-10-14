@@ -24,6 +24,8 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
     private String elemName;
     private featureCategory featureCat;
 
+    private boolean help_processed = false;
+
     /**
      * Constructor
      * @param parent base XMLReader
@@ -56,6 +58,19 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
         return newatts;
     }
 
+    private String getAttsValue(Attributes atts, String name) {
+        String result = null;
+
+        for (int i=0;i<atts.getLength();i++) {
+            String aname = atts.getQName(i);
+            if (aname.equals("key")) {
+                result = atts.getValue(i);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * startElement handler
      * @param uri namespace
@@ -65,7 +80,6 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
      * @throws SAXException
      */
     public final void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-
         elements.push(qName);
 
         for (int i=0;i<atts.getLength();i++) {
@@ -75,7 +89,7 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
                     featureCat = featureCategory.CATEGORY;
                     featureKey = "category." + atts.getValue(i);
                     elemName = qName;
-                } else if (qName.equals("input")) {
+                } else if (qName.equals("inputSet")) {
                     featureCat = featureCategory.INPUTSET;
                     featureKey = "input." + atts.getValue(i);
                     elemName = qName;
@@ -83,20 +97,36 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
                     featureCat = featureCategory.FEATURE;
                     featureKey = "feature." + atts.getValue(i);
                     elemName = qName;
-                } else {
-                    featureCat = featureCategory.NONE;
                 }
             }
-	    }
+        }
 
         AttributesImpl newatts = new AttributesImpl(atts);
-        if (featureKey != null && elemName == qName) {
-            if (featureCat == featureCategory.CATEGORY) {
-                newatts = replaceAtts(newatts, featureKey, "name");
+        if (featureKey != null) {
+            if (elemName == qName) {
+                if (featureCat == featureCategory.CATEGORY) {
+                    newatts = replaceAtts(newatts, featureKey, "name");
+                } else if (featureCat == featureCategory.FEATURE) {
+                    newatts = replaceAtts(newatts, featureKey, "name");
+                }
             } else if (featureCat == featureCategory.INPUTSET) {
-                newatts = replaceAtts(newatts, featureKey, "name");
+                if (qName.equals("input")) {
+                    String inputKey = getAttsValue(newatts, "key");
+                    if (inputKey != null) {
+                        featureKey = featureKey + "." + inputKey;
+                        newatts = replaceAtts(newatts, featureKey, "name");
+                        newatts = replaceAtts(newatts, featureKey, "description");
+                    }
+                } else if (qName.equals("choice")) {
+                    String choiceKey = getAttsValue(newatts, "value");
+                    if (choiceKey != null) {
+                        newatts = replaceAtts(newatts, featureKey + "." + choiceKey, "text");
+                    }
+                }
             } else if (featureCat == featureCategory.FEATURE) {
-                newatts = replaceAtts(newatts, featureKey, "name");
+                if (qName.equals("icon")) {
+                    newatts = replaceAtts(newatts, featureKey + ".icon", "image");
+                }
             }
         }
         super.startElement(uri, localName, qName, newatts);
@@ -111,16 +141,21 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
     public final void characters(char[] ch, int start, int length) throws SAXException {
         StringBuffer buf = new StringBuffer();
         String currentElem = elements.peek();
-          for (int i=0; i<length; i++) {
-            char c = ch[start + i];
-            buf.append(c);
-          }
-        // pass to output
-        int size = buf.length();
-        if (size > 0) {
-            char modified[] = new char[size];
-            buf.getChars(0, size, modified, 0);
-            super.characters(modified, 0, size);
+
+        if (currentElem.equals("help")) {
+            String helpuri = configuration.getProperty(featureKey + ".help");
+            if (helpuri != null && !help_processed) {
+                // replace chars to newchars
+                char[] newch = helpuri.toCharArray();
+                super.characters(newch, 0, newch.length);
+                help_processed = true;
+            } else {
+                // just pass to output
+                super.characters(ch, start, length);
+            }
+        } else {
+            // just pass to output
+            super.characters(ch, start, length);
         }
     }
 
@@ -133,7 +168,11 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
     public final void endElement(String uri, String localName, String qName) throws SAXException {
         String popedElem = elements.pop();
         if (elemName != null) {
+            if (featureCat == featureCategory.FEATURE && elemName.equals("help") && popedElem.equals("help")) {
+                help_processed = false;
+            }
             if (elemName.equals(popedElem)) {
+                elemName = null;
                 featureKey = null;
                 featureCat = featureCategory.NONE;
             }
