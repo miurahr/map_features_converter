@@ -51,8 +51,12 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
     private AttributesImpl replaceAtts(AttributesImpl newatts, String featureKey, String tag) {
         String localizedName = configuration.getProperty(featureKey + "." + tag);
 	int index = newatts.getIndex(tag);
-        if (localizedName != null && index >= 0) {
-            newatts.setValue(index, localizedName);
+        if (index >= 0) {
+            if (localizedName != null) {
+                newatts.setValue(index, localizedName);
+            } else {
+                System.out.println("Property doesnot exist! "+featureKey+"."+tag+"");
+            }
         }
         return newatts;
     }
