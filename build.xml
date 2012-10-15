@@ -1,4 +1,4 @@
-<project name="MapFeaturesConverter" default="dist" basedir="." xmlns:ac="antlib:net.sf.antcontrib">
+<project name="MapFeaturesConverter" default="test" basedir="." xmlns:ac="antlib:net.sf.antcontrib">
     <description>
         map_features converter for l10n
     </description>
@@ -22,8 +22,8 @@
   </target>
 
   <target name="dist" depends="compile" >
-    <mkdir dir="${dist.dir}/lib"/>
-    <jar jarfile="${dist.dir}/lib/MapFeaturesConverter.jar" basedir="${build.dir}">
+    <mkdir dir="${dist.dir}"/>
+    <jar jarfile="${dist.dir}/MapFeaturesConverter.jar" basedir="${build.dir}">
      <manifest>
       <attribute name="Main-Class" value="${main.class}"/>
       <attribute name="Class-Path" value="${runtime.classpath}"/>
@@ -45,7 +45,7 @@
     <attribute name="properties"/>
     <sequential>
       <java classname="${main.class}" dir="${basedir}"
-          fork="yes" classpath="${dist.dir}/lib/MapFeaturesConverter.jar">
+          fork="yes" classpath="${dist.dir}/MapFeaturesConverter.jar">
         <arg value="@{source}"/>
         <arg value="@{dest}"/>
         <arg value="@{properties}"/>
@@ -57,19 +57,19 @@
     <attribute name="locale" default="en_GB"/>
     <sequential>
       <ac:var name="present" unset="true"/>
-      <available file="${basedir}/data/@{locale}/map_features.properties" property="present"/>
+      <available file="${data.dir}/@{locale}/map_features.properties" property="present"/>
       <fail unless="present" message="There is not a map_features.properties for @{locale}"/>
 
-      <mkdir dir="${basedir}/out/@{locale}"/>
-      <localizeFeatures source="${basedir}/data/map_features.xml"
-                dest="${basedir}/out/@{locale}/map_features.xml"
-                properties="${basedir}/data/@{locale}/map_features.properties"/>
+      <mkdir dir="${dataout.dir}/@{locale}/map_features"/>
+      <localizeFeatures source="${data.dir}/map_features.xml"
+                dest="${dataout.dir}/@{locale}/map_features.xml"
+                properties="${data.dir}/@{locale}/map_features.properties"/>
 
       <ac:for list="${featureGroups.list}" keepgoing="true" param="featuregroupname">
         <sequential>
-          <localizeFeatures source="${basedir}/data/@{featuregroupname}.xml"
-                dest="${basedir}/out/@{locale}/@{featuregroupname}.xml"
-                properties="${basedir}/data/@{locale}/map_features.properties"/>
+          <localizeFeatures source="${data.dir}/map_features/@{featuregroupname}.xml"
+                dest="${dataout.dir}/@{locale}/map_features/@{featuregroupname}.xml"
+                properties="${data.dir}/@{locale}/map_features.properties"/>
           </sequential>
       </ac:for>
     </sequential>
@@ -78,10 +78,7 @@
   <macrodef name="deployLocale" description="Deploying the compiled zip file">
     <attribute name="locale" default="en_GB"/>
     <sequential>
-      <echo>Copying @{locale}.zip to deploy directory...</echo>
-
-      <mkdir dir="${basedir}/out"/>
-      <zip destfile="${basedir}/out/@{locale}.zip" basedir="${basedir}/out/@{locale}" />
+      <zip destfile="${dataout.dir}/@{locale}.zip" basedir="${dataout.dir}/@{locale}" />
     </sequential>
   </macrodef>
 
@@ -94,7 +91,9 @@
   <target name="test" depends="dist">
     <ac:for list="${locales.list}" keepgoing="true" param="localename">
       <sequential>
-        <buildL10NFeatures locale="@{localename}" />
+        <echo>build @{localename} assets</echo>
+        <buildL10NFeatures locale="@{localename}"/>
+        <deployLocale locale="@{localename}"/>
       </sequential>
     </ac:for>
   </target>
@@ -106,6 +105,11 @@
   <target name="clean">
     <delete dir="${build.dir}"/>
     <delete dir="${dist.dir}"/>
-    <delete dir="${basedir}/out"/>
+    <delete dir="${dataout.dir}"/>
+    <delete>
+      <fileset dir="${src.dir}" includes="**/*.class"/>
+      <fileset dir="${basedir}" includes="**/*.bak" defaultexcludes="no"/>
+      <fileset dir="${basedir}" includes="**/*~" defaultexcludes="no"/>
+    </delete>
   </target>
 </project>
