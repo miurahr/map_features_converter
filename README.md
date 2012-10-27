@@ -15,7 +15,7 @@ https://github.com/miurahr/map_features_converter/
 It will be merged on 
 https://github.com/miurahr/potlatch2/
 
-Compile
+Compile and Run
 --------
 
  This depend on Java and Ant.
@@ -25,15 +25,7 @@ Compile
 
  $ ant
 
-Run
---------
-
- You can use ant to test code.
- run 'ant test' on source directory
-
- $ ant test
-
- Test data is located in data/ directory.
+Test data is located in data/ directory.
  Output data will be located in out directory.
 
 Data files
@@ -63,14 +55,16 @@ Localize definition properties files
  * data/en_US/map_features.properties
  * data/ja_JP/map_features.properties
 
-Process Output
+Output
 
  * out/<locale>/*.xml
 
- en_US is for template.
- ja_JP is for testing CJK character.
+ en_US is for testing and providing a complete template.
+ ja_JP is for testing CJK characters.
 
 ToDo
 -------------
 
  * Remove comment and ignorable spaces to reduce file size.
+ * Merge and integrate to potlatch2
+ * Validate against DTD and generalize utility.
