@@ -43,12 +43,14 @@
     <attribute name="source"/>
     <attribute name="dest"/>
     <attribute name="properties"/>
+    <attribute name="missing"/>
     <sequential>
       <java classname="${main.class}" dir="${basedir}"
           fork="yes" classpath="${dist.dir}/MapFeaturesConverter.jar">
         <arg value="@{source}"/>
         <arg value="@{dest}"/>
         <arg value="@{properties}"/>
+        <arg value="@{missing}"/>
       </java>
     </sequential>
   </macrodef>
@@ -56,6 +58,7 @@
   <macrodef name="buildL10NFeatures" description="make gen/(lang)/map_features/(feature).xml">
     <attribute name="locale" default="en_GB"/>
     <sequential>
+      <delete file="${dataout.dir}/@{locale}/missing.properties"/>
       <ac:var name="present" unset="true"/>
       <available file="${data.dir}/@{locale}/map_features.properties" property="present"/>
       <fail unless="present" message="There is not a map_features.properties for @{locale}"/>
@@ -63,13 +66,15 @@
       <mkdir dir="${dataout.dir}/@{locale}/map_features"/>
       <localizeFeatures source="${data.dir}/map_features.xml"
                 dest="${dataout.dir}/@{locale}/map_features.xml"
-                properties="${data.dir}/@{locale}/map_features.properties"/>
+                properties="${data.dir}/@{locale}/map_features.properties"
+                missing="${dataout.dir}/@{locale}/missing.properties"/>
 
       <ac:for list="${featureGroups.list}" keepgoing="true" param="featuregroupname">
         <sequential>
           <localizeFeatures source="${data.dir}/map_features/@{featuregroupname}.xml"
                 dest="${dataout.dir}/@{locale}/map_features/@{featuregroupname}.xml"
-                properties="${data.dir}/@{locale}/map_features.properties"/>
+                properties="${data.dir}/@{locale}/map_features.properties"
+                missing="${dataout.dir}/@{locale}/missing.properties"/>
           </sequential>
       </ac:for>
     </sequential>
@@ -78,7 +83,8 @@
   <macrodef name="deployLocale" description="Deploying the compiled zip file">
     <attribute name="locale" default="en_GB"/>
     <sequential>
-      <zip destfile="${dataout.dir}/@{locale}.zip" basedir="${dataout.dir}/@{locale}" />
+      <zip destfile="${dataout.dir}/@{locale}.zip" basedir="${dataout.dir}/@{locale}"
+           excludesfile="${dataout.dir}/@{locale}/missing.properties"/>
     </sequential>
   </macrodef>
 

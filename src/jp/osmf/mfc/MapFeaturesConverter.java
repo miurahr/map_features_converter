@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
+import java.util.logging.*;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -32,15 +33,17 @@ public class MapFeaturesConverter {
         String sourceFile = "";
         String destFile = "";
         String propertiesFile = "";
+        String logFile = "";
         File inputFile;
         File outputFile;
 
-        if (args.length > 2) {
+        if (args.length > 3) {
             sourceFile = args[0];
             destFile = args[1];
             propertiesFile = args[2];
+            logFile = args[3];
         } else {
-            System.err.println("java -jar MapFeaturesConverter.jar <source> <dest> <properties>");
+            System.err.println("java -jar MapFeaturesConverter.jar <source> <dest> <properties> <log>");
             System.exit(1);
         }
 
@@ -52,7 +55,7 @@ public class MapFeaturesConverter {
             Properties configuration = new Properties();
             configuration.load(new InputStreamReader(propInputStream, "UTF-8"));
 
-            MapFeaturesFilter filter = new MapFeaturesFilter(XMLReaderFactory.createXMLReader(), configuration);
+            MapFeaturesFilter filter = new MapFeaturesFilter(XMLReaderFactory.createXMLReader(), configuration, logFile);
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer();
 

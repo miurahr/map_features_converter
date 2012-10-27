@@ -8,6 +8,13 @@ package jp.osmf.mfc;
 //
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
+
 import org.xml.sax.helpers.XMLFilterImpl;
 import org.xml.sax.XMLReader;
 import org.xml.sax.Attributes;
@@ -21,6 +28,7 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
     private Stack <String>featureKeys;
     private String featureKey;
     private String elemName;
+    private Logger logger;
 
     private boolean help_processed = false;
 
@@ -29,9 +37,25 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
      * @param parent base XMLReader
      * @throws SAXException
      */
-    public MapFeaturesFilter(XMLReader parent, Properties configuration) throws SAXException {
+    public MapFeaturesFilter(XMLReader parent, Properties configuration, String logFile) throws SAXException {
         super(parent);
         this.configuration = configuration;
+
+        try {
+            logger = Logger.getLogger(this.getClass().getName());
+            logger.setUseParentHandlers(false);
+            FileHandler fh = new FileHandler(logFile, true);
+            fh.setFormatter(new Formatter() {
+                @Override
+                public String format(LogRecord record) {
+                    return record.getMessage()+"\n";
+                }
+            });
+            logger.addHandler(fh);
+        }
+        catch (java.io.IOException e) {
+            System.err.println("IOException : " + e.getMessage());
+        }
     }
 
     public void startDocument() throws SAXException
@@ -55,7 +79,9 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
             if (localizedName != null) {
                 newatts.setValue(index, localizedName);
             } else {
-                System.out.println("Property doesnot exist! "+featureKey+"."+tag+"");
+                String newkey = featureKey+"."+tag;
+                // colon sign in properties should be escaped.
+                logger.log(Level.INFO, newkey.replace(":","\\:"));
             }
         }
         return newatts;
