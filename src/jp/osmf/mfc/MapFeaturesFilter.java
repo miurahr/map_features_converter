@@ -81,7 +81,7 @@ public final class MapFeaturesFilter extends XMLFilterImpl {
             } else {
                 String newkey = featureKey+"."+tag;
                 // colon sign in properties should be escaped.
-                logger.log(Level.INFO, newkey.replace(":","\\:"));
+                logger.log(Level.INFO, newkey.replace(":","\\:")+"="+newatts.getValue(index));
             }
         }
         return newatts;
